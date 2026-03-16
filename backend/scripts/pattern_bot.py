@@ -549,13 +549,16 @@ def derive_key():
 
 
 async def main(dry_run: bool):
-    from dotenv import load_dotenv
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    for rel in ["..", "../.."]:
-        p = os.path.join(script_dir, rel, ".env")
-        if os.path.exists(p):
-            load_dotenv(p)
-            break
+    try:
+        from dotenv import load_dotenv
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        for rel in ["..", "../.."]:
+            p = os.path.join(script_dir, rel, ".env")
+            if os.path.exists(p):
+                load_dotenv(p)
+                break
+    except ImportError:
+        pass  # Railway: env vars set directly, no .env needed
 
     private_key = os.getenv("POLY_PRIVATE_KEY", "")
     funder = os.getenv("POLY_FUNDER_ADDRESS", "")
@@ -563,7 +566,7 @@ async def main(dry_run: bool):
     relayer_key = os.getenv("POLY_RELAYER_API_KEY", "")
 
     if not private_key and not dry_run:
-        log.error("POLY_PRIVATE_KEY not set in .env — cannot trade")
+        log.error("POLY_PRIVATE_KEY not set (check env vars or .env file)")
         log.error("Run: python scripts/pattern_bot.py --derive-key")
         sys.exit(1)
 
