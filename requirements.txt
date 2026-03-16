@@ -1,0 +1,4 @@
+py_clob_client==0.34.6
+httpx>=0.28.0
+python-dotenv>=1.0.0
+web3>=7.0.0
