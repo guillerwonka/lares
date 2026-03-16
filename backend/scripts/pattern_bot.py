@@ -38,7 +38,7 @@ ENTRY_THRESHOLD = 0.87     # Buy when UP or DOWN midpoint >= this
 ENTRY_CEILING = 0.93       # Don't buy above this price
 SL_HIGH = 0.70             # SL (fixed for all entries)
 SL_LOW = 0.70              # SL (fixed for all entries)
-BET_SIZE = 15              # Fixed $15 per trade
+BET_SIZE = 40              # Fixed $40 per trade
 MIN_FILL = 75              # Minimum fill to keep trade ($75)
 ENTRY_WINDOW_START = 60    # Start evaluating at 60s remaining
 ONLY_DOWN = False          # Trade BOTH sides (UP has better edge)
