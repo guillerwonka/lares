@@ -327,7 +327,9 @@ class PolyClient:
             )
             return result
         except Exception as e:
-            logger.error("place_limit_buy failed: %s", e)
+            import traceback
+            logger.error("place_limit_buy failed: %r", e)
+            logger.error("Traceback: %s", traceback.format_exc())
             return None
 
     async def place_limit_sell(
