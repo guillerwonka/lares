@@ -560,10 +560,10 @@ async def main(dry_run: bool):
     except ImportError:
         pass  # Railway: env vars set directly, no .env needed
 
-    private_key = os.getenv("POLY_PRIVATE_KEY", "")
-    funder = os.getenv("POLY_FUNDER_ADDRESS", "")
-    api_key = os.getenv("POLY_API_KEY", "")
-    relayer_key = os.getenv("POLY_RELAYER_API_KEY", "")
+    private_key = os.getenv("POLY_PRIVATE_KEY", "").strip()
+    funder = os.getenv("POLY_FUNDER_ADDRESS", "").strip()
+    api_key = os.getenv("POLY_API_KEY", "").strip()
+    relayer_key = os.getenv("POLY_RELAYER_API_KEY", "").strip()
 
     if not private_key and not dry_run:
         log.error("POLY_PRIVATE_KEY not set (check env vars or .env file)")
