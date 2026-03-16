@@ -60,8 +60,18 @@ class PolyClient:
         """Initialize CLOB client with trading credentials."""
         from py_clob_client.clob_types import ApiCreds
 
+        # Strip whitespace/newlines from all credentials (Railway env vars)
+        private_key = private_key.strip()
+        funder_address = funder_address.strip()
+        api_key = api_key.strip() if api_key else ""
+        api_secret = api_secret.strip() if api_secret else ""
+        api_passphrase = api_passphrase.strip() if api_passphrase else ""
+        relayer_api_key = relayer_api_key.strip() if relayer_api_key else ""
+
         has_private_key = bool(private_key)
         has_api_creds = bool(api_key and api_secret and api_passphrase)
+
+        logger.info("Init: key=%s... funder=%s...", private_key[:8] if private_key else "none", funder_address[:10] if funder_address else "none")
 
         def _init():
             if has_private_key:
@@ -75,8 +85,13 @@ class PolyClient:
                     funder=funder_address,
                 )
                 # Always derive fresh creds from private key for consistency
-                creds = client.create_or_derive_api_creds()
-                client.set_api_creds(creds)
+                try:
+                    creds = client.create_or_derive_api_creds()
+                    client.set_api_creds(creds)
+                    logger.info("API creds derived OK")
+                except Exception as e:
+                    logger.error("Failed to derive API creds: %s", e)
+                    # Continue without creds — will fail on orders but not on balance/allowance
             else:
                 # L0 read-only: market discovery + prices only
                 client = ClobClient(host=CLOB_API, chain_id=CHAIN_ID)
